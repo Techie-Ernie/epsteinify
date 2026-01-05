@@ -15,6 +15,9 @@ python epsteinify.py -f FILENAME
 ```
 
 Optionally, you can change the default Epstein images folder using ```-i``` or ```--images```.
+
 You can change default number of lines to redact using ```-r``` or ```--redact```. 
+
+Specify output file name using ```-o``` or ```--output```. Defaults to ```FILENAME_redacted.pdf```
 
 

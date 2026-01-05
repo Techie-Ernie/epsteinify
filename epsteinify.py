@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(prog='Epsteinify', description="Turn your PDFs 
 parser.add_argument('-f,', '--filename')
 parser.add_argument('-i', '--images', default="images/")
 parser.add_argument('-r', '--redact', default=10)
+parser.add_argument('-o', '--output')
 args = parser.parse_args()
 
 input_file = args.filename
@@ -38,7 +39,9 @@ for i in range(num_pages):
             choice = random.randint(1, len(os.listdir(args.images)))
             page.replace_image(xref, filename=f'{args.images}/epstein{choice}.jpg')
 
-
-out_file = os.path.splitext(input_file)[0] + "_redacted.pdf"
+if args.output:
+  out_file = args.output
+else:
+  out_file = os.path.splitext(input_file)[0] + "_redacted.pdf"
 pdfDoc.save(out_file)
 print("Saved redacted PDF to", out_file)
