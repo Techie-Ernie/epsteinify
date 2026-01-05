@@ -1,6 +1,7 @@
 import os
 import fitz
 import random
+import argparse
 
 input_file = 'paper.pdf'
 pdfDoc = fitz.open(input_file)
@@ -27,7 +28,8 @@ for i in range(num_pages):
     if img_list:
       for img in img_list:
           xref = img[0]
-          page.replace_image(xref, filename='epstein.jpg')
+          choice = random.randint(1, len(os.listdir('images/')))
+          page.replace_image(xref, filename=f'images/epstein{choice}.jpg')
 
 
 out_file = os.path.splitext(input_file)[0] + "_redacted.pdf"
