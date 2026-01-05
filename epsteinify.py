@@ -3,7 +3,13 @@ import fitz
 import random
 import argparse
 
-input_file = 'paper.pdf'
+parser = argparse.ArgumentParser(prog='Epsteinify', description="Turn your PDFs into the Epstein files")
+parser.add_argument('-f,', '--filename')
+parser.add_argument('-i', '--images', default="images/")
+parser.add_argument('-r', '--redact', default=10)
+args = parser.parse_args()
+
+input_file = args.filename
 pdfDoc = fitz.open(input_file)
 num_pages = pdfDoc.page_count
 for i in range(num_pages):
@@ -12,7 +18,7 @@ for i in range(num_pages):
     sentences = [s.strip() for s in page.get_text().split('.') if s.strip()]
     if not sentences:
         continue
-    selected = random.choices(sentences, k=min(10, len(sentences)))
+    selected = random.choices(sentences, k=min(int(args.redact), len(sentences)))
     for sentence in selected:
         if not sentence:
             continue
@@ -28,8 +34,9 @@ for i in range(num_pages):
     if img_list:
       for img in img_list:
           xref = img[0]
-          choice = random.randint(1, len(os.listdir('images/')))
-          page.replace_image(xref, filename=f'images/epstein{choice}.jpg')
+          if args.images:
+            choice = random.randint(1, len(os.listdir(args.images)))
+            page.replace_image(xref, filename=f'{args.images}/epstein{choice}.jpg')
 
 
 out_file = os.path.splitext(input_file)[0] + "_redacted.pdf"
